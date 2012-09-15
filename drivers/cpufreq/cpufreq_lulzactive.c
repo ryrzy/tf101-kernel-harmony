@@ -53,6 +53,8 @@
 #define LOGD(fmt...) printk(KERN_DEBUG "[lulzactive] " fmt)
 
 static void (*pm_idle_old)(void);
+#define DEFAULT_SAMPLE_RATE_JIFFIES 2
+static unsigned int sample_rate_jiffies;
 static atomic_t active_count = ATOMIC_INIT(0);
 
 struct cpufreq_lulzactive_cpuinfo {
@@ -68,6 +70,7 @@ struct cpufreq_lulzactive_cpuinfo {
 	struct cpufreq_frequency_table *freq_table;
 	unsigned int freq_table_size;
 	unsigned int target_freq;
+        unsigned int enable;
 	int governor_enabled;
 };
 
@@ -623,23 +626,28 @@ static void cpufreq_lulzactive_idle_end(void)
 
 }
 
+inline static void reset_timer(unsigned long cpu, struct cpufreq_lulzactive_cpuinfo *this_lulzactive) {
+	this_lulzactive->time_in_idle = get_cpu_idle_time_us(cpu, &this_lulzactive->idle_exit_time);
+	mod_timer(&this_lulzactive->cpu_timer, jiffies + sample_rate_jiffies);
+}
+
 static void cpufreq_idle(void)
 {
-	struct smartass_info_s *this_smartass = &per_cpu(smartass_info, smp_processor_id());
-	struct cpufreq_policy *policy = this_smartass->cur_policy;
+	struct cpufreq_lulzactive_cpuinfo *this_lulzactive = &per_cpu(cpuinfo, smp_processor_id());
+	struct cpufreq_policy *policy = this_lulzactive->policy;
 
-	if (!this_smartass->enable) {
+	if (!this_lulzactive->enable) {
 		pm_idle_old();
 		return;
 	}
 
-	if (policy->cur == policy->min && timer_pending(&this_smartass->timer))
-		del_timer(&this_smartass->timer);
+	if (policy->cur == policy->min && timer_pending(&this_lulzactive->cpu_timer))
+		del_timer(&this_lulzactive->cpu_timer);
 
 	pm_idle_old();
 
-	if (!timer_pending(&this_smartass->timer))
-		reset_timer(smp_processor_id(), this_smartass);
+	if (!timer_pending(&this_lulzactive->cpu_timer))
+		reset_timer(smp_processor_id(), this_lulzactive);
 }
 
 static int cpufreq_lulzactive_up_task(void *data)
@@ -1180,5 +1188,5 @@ static void __exit cpufreq_lulzactive_exit(void)
 module_exit(cpufreq_lulzactive_exit);
 
 MODULE_AUTHOR("Tegrak <luciferanna@gmail.com>");
-MODULE_DESCRIPTION("'lulzactive' - improved interactive governor inspired by smartass");
+MODULE_DESCRIPTION("'lulzactive' - improved interactive governor inspired by lulzactive");
 MODULE_LICENSE("GPL");
