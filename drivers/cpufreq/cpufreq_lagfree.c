@@ -30,10 +30,6 @@
 #include <linux/percpu.h>
 #include <linux/mutex.h>
 #include <linux/earlysuspend.h>
-/*
- * dbs is used in this file as a shortform for demandbased switching
- * It helps to keep variable names smaller, simpler
- */
 
 /*
  * The definition of 'SAMPLING_LATENCY_MULTIPLIER' and 'MIN_TICKS'
@@ -42,11 +38,15 @@
  */
 #define CONFIG_CPU_FREQ_SAMPLING_LATENCY_MULTIPLIER		(1000)
 #define CONFIG_CPU_FREQ_MIN_TICKS		(10)
+/*
+ * dbs is used in this file as a shortform for demandbased switching
+ * It helps to keep variable names smaller, simpler
+ */
 
-#define DEF_FREQUENCY_UP_THRESHOLD			(80)
-#define DEF_FREQUENCY_DOWN_THRESHOLD		(35)
+#define DEF_FREQUENCY_UP_THRESHOLD			(50)
+#define DEF_FREQUENCY_DOWN_THRESHOLD		(15)
 #define FREQ_STEP_DOWN 						(160000)
-#define FREQ_SLEEP_MAX 						(216000)
+#define FREQ_SLEEP_MAX 						(320000)
 #define FREQ_AWAKE_MIN 						(480000)
 #define FREQ_STEP_UP_SLEEP_PERCENT 			(20)
 
@@ -69,8 +69,8 @@ unsigned int suspended = 0;
 #define MIN_SAMPLING_RATE			\
 			(def_sampling_rate / MIN_SAMPLING_RATE_RATIO)
 #define MAX_SAMPLING_RATE			(500 * def_sampling_rate)
-#define DEF_SAMPLING_DOWN_FACTOR		(10)
-#define MAX_SAMPLING_DOWN_FACTOR		(100)
+#define DEF_SAMPLING_DOWN_FACTOR		(4)
+#define MAX_SAMPLING_DOWN_FACTOR		(10)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static void do_dbs_timer(struct work_struct *work);
@@ -668,4 +668,3 @@ fs_initcall(cpufreq_gov_dbs_init);
 module_init(cpufreq_gov_dbs_init);
 #endif
 module_exit(cpufreq_gov_dbs_exit); 
-

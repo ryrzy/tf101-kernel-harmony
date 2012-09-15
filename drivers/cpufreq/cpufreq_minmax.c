@@ -65,8 +65,8 @@ static unsigned int def_sampling_rate;
 #define MIN_SAMPLING_RATE			\
 			(def_sampling_rate / MIN_SAMPLING_RATE_RATIO)
 #define MAX_SAMPLING_RATE			(500 * def_sampling_rate)
-#define DEF_SAMPLING_DOWN_FACTOR		(1) //10
-#define MAX_SAMPLING_DOWN_FACTOR		(10) //100
+#define DEF_SAMPLING_DOWN_FACTOR		(10) //10
+#define MAX_SAMPLING_DOWN_FACTOR		(100) //100
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static void do_dbs_timer(struct work_struct *work);

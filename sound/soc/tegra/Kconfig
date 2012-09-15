@@ -144,5 +144,9 @@ config SND_SOC_TEGRA_TLV320AIC326X
 
 config HEADSET_FUNCTION
 	tristate "Headset detection function"
-        default n    
+        default n
+
+config TEGRA_VOODOO_SOUND	
+	bool "Voodoo sound"
+	default y    
 

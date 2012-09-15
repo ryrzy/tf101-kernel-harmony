@@ -27,13 +27,6 @@
 #include <linux/slab.h>
 #include <linux/earlysuspend.h>
 
-#define _LIMIT_LCD_OFF_CPU_MAX_FREQ_
-
-/*
- * dbs is used in this file as a shortform for demandbased switching
- * It helps to keep variable names smaller, simpler
- */
-
 /*
  * The definition of 'SAMPLING_LATENCY_MULTIPLIER' and 'MIN_TICKS'
  * is now excluded from .config (or <<device>>.defconfig)
@@ -42,10 +35,17 @@
 #define CONFIG_CPU_FREQ_SAMPLING_LATENCY_MULTIPLIER		(1000)
 #define CONFIG_CPU_FREQ_MIN_TICKS		(10)
 
+#define _LIMIT_LCD_OFF_CPU_MAX_FREQ_
+
+/*
+ * dbs is used in this file as a shortform for demandbased switching
+ * It helps to keep variable names smaller, simpler
+ */
+
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)
-#define DEF_FREQUENCY_UP_THRESHOLD		(80)
-#define DEF_SAMPLING_DOWN_FACTOR		(1)
-#define MAX_SAMPLING_DOWN_FACTOR		(10)
+#define DEF_FREQUENCY_UP_THRESHOLD		(95)
+#define DEF_SAMPLING_DOWN_FACTOR		(25)
+#define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
 #define MICRO_FREQUENCY_UP_THRESHOLD		(95)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
@@ -900,5 +900,4 @@ fs_initcall(cpufreq_gov_dbs_init);
 module_init(cpufreq_gov_dbs_init);
 #endif
 module_exit(cpufreq_gov_dbs_exit);
-
 
