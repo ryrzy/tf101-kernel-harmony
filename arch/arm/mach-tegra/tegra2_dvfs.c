@@ -42,11 +42,11 @@ static bool tegra_dvfs_cpu_disabled = true;
 static const int core_millivolts[MAX_DVFS_FREQS] =
 	{950, 1000, 1100, 1200, 1225, 1275, 1300, 1400, 1450};
 static const int cpu_millivolts[MAX_DVFS_FREQS] =
-	{750, 775, 800, 825, 850, 875, 900, 950, 1000, 1100, 1150, 1225, 1300, 1375, 1400};
+	{750, 775, 800, 825, 850, 875, 900, 925, 950, 975, 1000, 1175, 1275, 1325, 1375, 1400};
 
 static const int cpu_speedo_nominal_millivolts[] =
 /* spedo_id  0,    1,    2 */
-	{ 1100, 1300, 1125 }; //1100, 1025, 1125
+	{ 1100, 1350, 1125 }; //1100, 1025, 1125
 
 static const int core_speedo_nominal_millivolts[] =
 /* spedo_id  0,    1,    2 */
@@ -59,14 +59,14 @@ static struct dvfs_rail tegra2_dvfs_rail_vdd_cpu = {
 	.reg_id = "vdd_cpu",
 	.max_millivolts = 1400, //1125
 	.min_millivolts = 750,
-	.nominal_millivolts = 1300, //1125
+	.nominal_millivolts = 1400, //1125
 };
 
 static struct dvfs_rail tegra2_dvfs_rail_vdd_core = {
 	.reg_id = "vdd_core",
 	.max_millivolts = 1450, //1300
 	.min_millivolts = 950,
-	.nominal_millivolts = 1300, //1225
+	.nominal_millivolts = 1450, //1225
 	.step = 150, /* step vdd_core by 150 mV to allow vdd_aon to follow */
 };
 
@@ -74,13 +74,13 @@ static struct dvfs_rail tegra2_dvfs_rail_vdd_aon = {
 	.reg_id = "vdd_aon",
 	.max_millivolts = 1450, //1300
 	.min_millivolts = 950,
-	.nominal_millivolts = 1300, //1225
+	.nominal_millivolts = 1450, //1225
 #ifndef CONFIG_TEGRA_CORE_DVFS
 	.disabled = true,
 #endif
 };
 
-/* vdd_core and vdd_aon must be 25 mV higher than vdd_cpu */ //universe-branch-rev02 : 50 mV
+/* vdd_core and vdd_aon must be 50 mV higher than vdd_cpu */ //universe-branch-rev02 : 50 mV
 static int tegra2_dvfs_rel_vdd_cpu_vdd_core(struct dvfs_rail *vdd_cpu,
 	struct dvfs_rail *vdd_core)
 {

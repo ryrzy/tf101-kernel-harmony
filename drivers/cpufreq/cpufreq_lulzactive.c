@@ -1088,6 +1088,7 @@ static struct early_suspend lulzactive_power_suspend = {
 	.level = EARLY_SUSPEND_LEVEL_DISABLE_FB + 1,
 };
 
+/*
 void start_lulzactive(void)
 {
 	//it is more appropriate to start the up_task thread after starting the governor -gm
@@ -1095,7 +1096,7 @@ void start_lulzactive(void)
 	struct cpufreq_lulzactive_cpuinfo *pcpu;
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO-1 };
 
-	/* Initalize per-cpu timers */
+	/* Initalize per-cpu timers
 	for_each_possible_cpu(i) {
 		pcpu = &per_cpu(cpuinfo, i);
 		init_timer(&pcpu->cpu_timer);
@@ -1131,6 +1132,7 @@ void stop_lulzactive(void)
 	idle_notifier_unregister(&cpufreq_lulzactive_idle_nb);
 	unregister_early_suspend(&lulzactive_power_suspend);
 }
+*/
 
 static int __init cpufreq_lulzactive_init(void)
 {
